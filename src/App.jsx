@@ -195,63 +195,63 @@ function getVerdict(score) {
     return {
       label: 'Buy it',
       tone: 'excellent',
-      eyebrow: 'Strong value',
+      eyebrow: 'Green light',
     }
   }
 
   if (score >= 70) {
     return {
-      label: 'Worth it, but check timing',
+      label: 'Looks solid',
       tone: 'good',
-      eyebrow: 'Looks reasonable',
+      eyebrow: 'Almost a yes',
     }
   }
 
   if (score >= 55) {
     return {
-      label: 'Wait',
+      label: 'Wait a bit',
       tone: 'warning',
-      eyebrow: 'Give it time',
+      eyebrow: 'Not urgent',
     }
   }
 
   if (score >= 40) {
     return {
-      label: 'Think harder',
+      label: 'Sleep on it',
       tone: 'caution',
-      eyebrow: 'Mixed signal',
+      eyebrow: 'Mixed feelings',
     }
   }
 
   return {
-    label: 'Skip it',
+    label: 'Skip for now',
     tone: 'danger',
-    eyebrow: 'Weak value',
+    eyebrow: 'Wallet says no',
   }
 }
 
 function buildRecommendation({ metrics, score, verdict }) {
   if (metrics.monthlySavings <= 0) {
-    return 'You currently have no monthly savings capacity for this purchase. Fix the savings gap first, then run the decision again.'
+    return 'Right now there is no monthly savings room for this. Sort the savings gap first, then come back for a cleaner yes or no.'
   }
 
   if (score >= 85) {
-    return `This looks worth buying because it fits your savings capacity, has strong personal value, and the regret risk is controlled.`
+    return `This one looks pretty safe to buy. It fits your savings rhythm, the value is strong, and regret risk is not waving a big red flag.`
   }
 
   if (score >= 70) {
-    return `This is a reasonable purchase, but the timing still matters. If you can buy it without touching emergency money, it passes the test.`
+    return `This is probably fine, just do the timing check. If you can buy it without poking your emergency money, it passes the vibe check.`
   }
 
   if (score >= 55) {
-    return `Wait 30 days before buying. The desire is real, but the money or long-term value does not fully support an immediate yes.`
+    return `Give it 30 days. You clearly want it, but the money/time side is not giving a confident yes yet.`
   }
 
-  if (verdict.label === 'Think harder') {
-    return `The numbers are not clearly against it, but they are not clearly for it either. Compare alternatives and lower the cost before deciding.`
+  if (verdict.label === 'Sleep on it') {
+    return `This is in the messy middle. Compare a few alternatives, try to lower the cost, and see if you still care tomorrow.`
   }
 
-  return `Skip it for now. The purchase takes too much savings time compared with the need, usage, and regret protection signals.`
+  return `Skip this one for now. It asks for too much money or time compared with how much you need it and how often you will use it.`
 }
 
 function calculateResult(income, purchase) {
@@ -353,7 +353,7 @@ function loadHistory() {
 }
 
 function StepIndicator({ activeStep }) {
-  const steps = ['Income', 'Purchase', 'Result']
+  const steps = ['Money', 'Item', 'Verdict']
 
   return (
     <div className="stepper" aria-label="Progress">
@@ -386,6 +386,33 @@ function NumberField({ label, value, onChange, min = 0, suffix }) {
         {suffix ? <small>{suffix}</small> : null}
       </div>
     </label>
+  )
+}
+
+function SliderField({ label, value, min, max, suffix = '', onChange, hint }) {
+  const progress = ((Number(value) - min) / (max - min)) * 100
+
+  return (
+    <div
+      className="slider-field"
+      style={{ '--range-progress': `${clamp(progress, 0, 100)}%` }}
+    >
+      <div>
+        <span>{label}</span>
+        <strong>
+          {value}
+          {suffix}
+        </strong>
+      </div>
+      <input
+        max={max}
+        min={min}
+        onChange={(event) => onChange(Number(event.target.value))}
+        type="range"
+        value={value}
+      />
+      {hint ? <p>{hint}</p> : null}
+    </div>
   )
 }
 
@@ -443,10 +470,10 @@ function IncomeStep({ income, setIncome, onNext }) {
     <section className="panel form-panel">
       <div className="panel-heading">
         <p className="eyebrow">Step 1</p>
-        <h2>Income details</h2>
+        <h2>First, your money rhythm</h2>
         <p>
-          Start with your real earning and saving rhythm. This lets the app
-          translate price into time.
+          No judgment here. We just need enough context to turn a price tag
+          into actual hours, weeks, and breathing room.
         </p>
       </div>
 
@@ -478,62 +505,46 @@ function IncomeStep({ income, setIncome, onNext }) {
         />
       </div>
 
-      <div className="slider-field">
-        <div>
-          <span>Savings percentage</span>
-          <strong>{income.savingsPercentage}%</strong>
-        </div>
-        <input
-          max="80"
-          min="0"
-          onChange={(event) =>
-            setIncome((current) => ({
-              ...current,
-              savingsPercentage: Number(event.target.value),
-            }))
-          }
-          type="range"
-          value={income.savingsPercentage}
-        />
-      </div>
+      <SliderField
+        hint="This is the money you can spend without bullying next month."
+        label="Savings percentage"
+        max={80}
+        min={0}
+        onChange={(value) =>
+          setIncome((current) => ({
+            ...current,
+            savingsPercentage: value,
+          }))
+        }
+        suffix="%"
+        value={income.savingsPercentage}
+      />
 
       <div className="form-grid two-col">
-        <div className="slider-field compact">
-          <div>
-            <span>Hours per day</span>
-            <strong>{income.workHoursPerDay}</strong>
-          </div>
-          <input
-            max="14"
-            min="1"
-            onChange={(event) =>
-              setIncome((current) => ({
-                ...current,
-                workHoursPerDay: Number(event.target.value),
-              }))
-            }
-            type="range"
-            value={income.workHoursPerDay}
-          />
-        </div>
-        <div className="slider-field compact">
-          <div>
-            <span>Days per week</span>
-            <strong>{income.workDaysPerWeek}</strong>
-          </div>
-          <input
-            max="7"
-            min="1"
-            onChange={(event) =>
-              setIncome((current) => ({
-                ...current,
-                workDaysPerWeek: Number(event.target.value),
-              }))
-            }
-            type="range"
-            value={income.workDaysPerWeek}
-          />
-        </div>
+        <SliderField
+          label="Hours per day"
+          max={14}
+          min={1}
+          onChange={(value) =>
+            setIncome((current) => ({
+              ...current,
+              workHoursPerDay: value,
+            }))
+          }
+          value={income.workHoursPerDay}
+        />
+        <SliderField
+          label="Days per week"
+          max={7}
+          min={1}
+          onChange={(value) =>
+            setIncome((current) => ({
+              ...current,
+              workDaysPerWeek: value,
+            }))
+          }
+          value={income.workDaysPerWeek}
+        />
       </div>
 
       <div className="insight-strip">
@@ -549,7 +560,7 @@ function IncomeStep({ income, setIncome, onNext }) {
 
       <div className="actions right">
         <button className="primary" onClick={onNext} type="button">
-          Next
+          Next, judge the item
         </button>
       </div>
     </section>
@@ -561,10 +572,10 @@ function PurchaseStep({ purchase, setPurchase, onBack, onCalculate }) {
     <section className="panel form-panel">
       <div className="panel-heading">
         <p className="eyebrow">Step 2</p>
-        <h2>Purchase details</h2>
+        <h2>Now, the thing you want</h2>
         <p>
-          Tell the app what you are considering and how useful it will actually
-          be after the excitement fades.
+          Be honest with yourself here. Is this a real upgrade, or just a shiny
+          little dopamine trap?
         </p>
       </div>
 
@@ -708,7 +719,7 @@ function PurchaseStep({ purchase, setPurchase, onBack, onCalculate }) {
           Back
         </button>
         <button className="primary" onClick={onCalculate} type="button">
-          Calculate result
+          Show me the verdict
         </button>
       </div>
     </section>
@@ -719,8 +730,8 @@ function ResultCard({ result, onReset, onEdit, onShare }) {
   const { income, purchase, metrics, verdict } = result
   const monthlySavingsMessage =
     metrics.monthlySavings <= 0
-      ? 'You currently have no savings capacity for this purchase.'
-      : `You need ${formatCompactNumber(metrics.weeksToSave)} weeks to save for it.`
+      ? 'No savings room for this one yet.'
+      : `About ${formatCompactNumber(metrics.weeksToSave)} weeks of saving gets you there.`
 
   return (
     <section className={`panel result-panel ${verdict.tone}`}>
@@ -749,11 +760,11 @@ function ResultCard({ result, onReset, onEdit, onShare }) {
           <p>
             {Number.isFinite(metrics.workDaysNeeded)
               ? `${formatCompactNumber(metrics.workDaysNeeded)} work days`
-              : 'Add valid income and work hours'}
+              : 'Add real income and work hours'}
           </p>
         </div>
         <div>
-          <span>Saving time</span>
+          <span>Save-up time</span>
           <strong>
             {Number.isFinite(metrics.monthsToSave)
               ? `${formatCompactNumber(metrics.monthsToSave)} months`
@@ -762,7 +773,7 @@ function ResultCard({ result, onReset, onEdit, onShare }) {
           <p>{monthlySavingsMessage}</p>
         </div>
         <div>
-          <span>Cost per use</span>
+          <span>Cost each time</span>
           <strong>{formatMoney(metrics.costPerUse, income.currency)}</strong>
           <p>
             {purchase.purchaseType === 'Subscription'
@@ -799,7 +810,7 @@ function ResultCard({ result, onReset, onEdit, onShare }) {
           Calculate another
         </button>
         <button className="primary" onClick={onShare} type="button">
-          Copy share text
+          Copy the verdict
         </button>
       </div>
     </section>
@@ -813,7 +824,7 @@ function HistoryTable({ history, onClear, onDelete, onEdit }) {
         <div>
           <p className="eyebrow">Local history</p>
           <h2>No decisions saved yet</h2>
-          <p>Your calculated purchases will appear here on this device.</p>
+          <p>Your past money debates will show up here on this device.</p>
         </div>
       </section>
     )
@@ -824,7 +835,7 @@ function HistoryTable({ history, onClear, onDelete, onEdit }) {
       <div className="history-heading">
         <div>
           <p className="eyebrow">Local history</p>
-          <h2>Decision history</h2>
+          <h2>Past money debates</h2>
         </div>
         <button className="secondary" onClick={onClear} type="button">
           Clear history
@@ -939,7 +950,7 @@ function App() {
       await navigator.clipboard.writeText(text)
       setShareStatus('Share text copied.')
     } catch {
-      setShareStatus('Copy failed. Select the result text manually.')
+      setShareStatus('Copy failed. The browser said no.')
     }
   }
 
@@ -950,14 +961,14 @@ function App() {
           <p className="eyebrow">No-backend decision helper</p>
           <h1>Buy It or Not?</h1>
           <p>
-            Convert price into work time, savings delay, cost per use, and
-            regret risk before you spend.
+            Before you hit buy, see what it really costs in work hours,
+            savings time, and future regret.
           </p>
         </div>
         <div className="hero-stat">
-          <span>Transparent score</span>
+          <span>Decision score</span>
           <strong>100</strong>
-          <p>points across money, time, value, and emotion.</p>
+          <p>points across money, time, value, and that little voice in your head.</p>
         </div>
       </section>
 
