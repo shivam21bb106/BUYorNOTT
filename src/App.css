@@ -49,9 +49,8 @@
   justify-content: space-between;
   margin: 0 0 24px;
   padding: 10px 12px;
-  position: sticky;
-  top: 16px;
-  z-index: 10;
+  position: relative;
+  z-index: 1;
 }
 
 .brand-mark,
@@ -280,6 +279,7 @@
 }
 
 .workspace {
+  scroll-margin-top: 24px;
   display: grid;
   justify-items: center;
   min-height: 520px;
@@ -876,6 +876,7 @@ button {
 .history-panel {
   margin-top: 28px;
   padding: 26px;
+  scroll-margin-top: 24px;
 }
 
 .history-heading {
