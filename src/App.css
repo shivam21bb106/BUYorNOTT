@@ -35,6 +35,83 @@
   width: 300px;
 }
 
+.top-nav {
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
+    rgba(5, 9, 20, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 24px;
+  padding: 10px 12px;
+  position: sticky;
+  top: 16px;
+  z-index: 10;
+}
+
+.brand-mark,
+.nav-links,
+.site-footer div {
+  align-items: center;
+  display: flex;
+}
+
+.brand-mark,
+.nav-links a,
+.site-footer a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand-mark {
+  font-size: 15px;
+  font-weight: 900;
+  gap: 10px;
+  padding-left: 4px;
+}
+
+.brand-mark span {
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary), var(--violet));
+  border-radius: 12px;
+  color: #050712;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.nav-links {
+  gap: 4px;
+}
+
+.nav-links a {
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 14px;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.nav-links a:hover,
+.site-footer a:hover {
+  color: var(--primary);
+}
+
+.nav-links a:hover {
+  background: rgba(125, 211, 252, 0.1);
+  transform: translateY(-1px);
+}
+
 .hero-section {
   align-items: stretch;
   display: grid;
@@ -874,6 +951,34 @@ button {
   text-align: center;
 }
 
+.site-footer {
+  align-items: center;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 34px;
+  padding: 22px 4px 0;
+}
+
+.site-footer p,
+.site-footer span,
+.site-footer a {
+  font-size: 14px;
+}
+
+.site-footer div {
+  color: var(--subtle);
+  gap: 14px;
+}
+
+.site-footer a {
+  color: var(--muted);
+  font-weight: 800;
+  transition: color 160ms ease;
+}
+
 @media (max-width: 820px) {
   .app-shell {
     padding-top: 24px;
@@ -928,9 +1033,35 @@ button {
   .history-actions {
     justify-content: flex-start;
   }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 520px) {
+  .top-nav {
+    align-items: stretch;
+    border-radius: 20px;
+    flex-direction: column;
+    gap: 8px;
+    position: static;
+  }
+
+  .brand-mark {
+    padding-left: 0;
+  }
+
+  .nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .nav-links a {
+    text-align: center;
+  }
+
   .hero-section h1 {
     font-size: 48px;
   }

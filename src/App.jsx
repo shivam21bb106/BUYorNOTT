@@ -820,7 +820,7 @@ function ResultCard({ result, onReset, onEdit, onShare }) {
 function HistoryTable({ history, onClear, onDelete, onEdit }) {
   if (history.length === 0) {
     return (
-      <section className="panel history-panel empty-history">
+      <section className="panel history-panel empty-history" id="history">
         <div>
           <p className="eyebrow">Local history</p>
           <h2>No decisions saved yet</h2>
@@ -831,7 +831,7 @@ function HistoryTable({ history, onClear, onDelete, onEdit }) {
   }
 
   return (
-    <section className="panel history-panel">
+    <section className="panel history-panel" id="history">
       <div className="history-heading">
         <div>
           <p className="eyebrow">Local history</p>
@@ -955,7 +955,18 @@ function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className="app-shell" id="top">
+      <nav className="top-nav" aria-label="Main navigation">
+        <a className="brand-mark" href="#top" aria-label="WorthCheck home">
+          <span>W</span>
+          WorthCheck
+        </a>
+        <div className="nav-links">
+          <a href="#calculator">Calculator</a>
+          <a href="#history">History</a>
+        </div>
+      </nav>
+
       <section className="hero-section">
         <div>
           <p className="eyebrow">Smart spend check</p>
@@ -974,7 +985,7 @@ function App() {
 
       <StepIndicator activeStep={activeStep} />
 
-      <div className="workspace">
+      <div className="workspace" id="calculator">
         {activeStep === 1 ? (
           <IncomeStep
             income={income}
@@ -1012,6 +1023,14 @@ function App() {
         }
         onEdit={handleEdit}
       />
+
+      <footer className="site-footer">
+        <p>WorthCheck keeps your decisions on this device.</p>
+        <div>
+          <a href="#calculator">Start over</a>
+          <span>Built for smarter spending</span>
+        </div>
+      </footer>
     </main>
   )
 }
