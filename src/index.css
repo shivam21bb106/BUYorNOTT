@@ -1,16 +1,23 @@
 :root {
-  --bg: #eef5ff;
-  --surface: #f7fbff;
-  --text: #0f172a;
-  --muted: #64748b;
-  --border: #d9e5f4;
-  --primary: #246bfe;
-  --primary-dark: #1d4ed8;
-  --primary-soft: #dbeafe;
-  --mint: #10b981;
-  --amber: #f59e0b;
-  --rose: #ef4444;
-  --shadow: 0 24px 70px rgba(15, 23, 42, 0.11);
+  --bg: #050712;
+  --bg-soft: #080d1d;
+  --panel: rgba(13, 20, 38, 0.82);
+  --panel-strong: rgba(18, 28, 52, 0.94);
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-strong: rgba(255, 255, 255, 0.1);
+  --text: #f8fbff;
+  --muted: #9aa8c7;
+  --subtle: #657393;
+  --border: rgba(148, 163, 184, 0.2);
+  --border-strong: rgba(125, 211, 252, 0.34);
+  --primary: #7dd3fc;
+  --primary-dark: #38bdf8;
+  --primary-soft: rgba(125, 211, 252, 0.14);
+  --mint: #34d399;
+  --amber: #fbbf24;
+  --rose: #fb7185;
+  --violet: #a78bfa;
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
   color: var(--text);
   background: var(--bg);
   font-family:
@@ -29,12 +36,25 @@
 
 body {
   background:
-    linear-gradient(125deg, rgba(219, 234, 254, 0.95), transparent 34%),
-    linear-gradient(220deg, rgba(220, 252, 231, 0.82), transparent 35%),
-    linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+    radial-gradient(circle at 12% 10%, rgba(56, 189, 248, 0.22), transparent 26rem),
+    radial-gradient(circle at 86% 6%, rgba(167, 139, 250, 0.22), transparent 26rem),
+    radial-gradient(circle at 72% 88%, rgba(52, 211, 153, 0.13), transparent 28rem),
+    linear-gradient(180deg, #050712 0%, #080d1d 48%, #040611 100%);
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+body::before {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 52px 52px;
+  content: '';
+  inset: 0;
+  mask-image: linear-gradient(to bottom, black, transparent 76%);
+  pointer-events: none;
+  position: fixed;
 }
 
 button,
@@ -52,16 +72,16 @@ p {
 
 h1 {
   color: var(--text);
-  font-size: 64px;
+  font-size: 72px;
   letter-spacing: 0;
-  line-height: 0.95;
+  line-height: 0.9;
 }
 
 h2 {
   color: var(--text);
-  font-size: 30px;
+  font-size: 32px;
   letter-spacing: 0;
-  line-height: 1.1;
+  line-height: 1.08;
 }
 
 p {

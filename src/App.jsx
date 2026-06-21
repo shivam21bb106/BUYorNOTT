@@ -944,7 +944,7 @@ function App() {
       return
     }
 
-    const text = `Buy It or Not? ${currentResult.purchase.itemName || 'Purchase'} scored ${currentResult.score}/100: ${currentResult.verdict.label}. ${currentResult.recommendation}`
+    const text = `WorthCheck: ${currentResult.purchase.itemName || 'Purchase'} scored ${currentResult.score}/100: ${currentResult.verdict.label}. ${currentResult.recommendation}`
 
     try {
       await navigator.clipboard.writeText(text)
@@ -958,8 +958,8 @@ function App() {
     <main className="app-shell">
       <section className="hero-section">
         <div>
-          <p className="eyebrow">No-backend decision helper</p>
-          <h1>Buy It or Not?</h1>
+          <p className="eyebrow">Smart spend check</p>
+          <h1>WorthCheck</h1>
           <p>
             Before you hit buy, see what it really costs in work hours,
             savings time, and future regret.
